@@ -9,7 +9,7 @@ class BookInfo(models.Model):
     bpub_date = models.DateField(verbose_name="发布日前")
     bread = models.IntegerField(default=0, verbose_name="阅读量")
     bcomment = models.IntegerField(default=0, verbose_name="评论量")
-    logo = models.ImageField(upload_to='img',verbose_name='封面',null= True)  # 传图片  upload_to='img'是 static_files/media 路径下的创建图片
+    image = models.ImageField(upload_to='img',verbose_name='封面',null= True)  # 传图片  upload_to='img'是 static_files/media 路径下的创建图片
     is_delete = models.BooleanField(default=False, verbose_name="逻辑删除")
 
     class Meta:
