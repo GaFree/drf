@@ -6,7 +6,8 @@ from django.shortcuts import render
 from django.views.generic import View
 import json
 from rest_framework.viewsets import ModelViewSet  # DRF 导入
-from .serializers import BookInfoSerializers
+from .serializers import BookInfoSerializers, BookInfoSerializer
+
 # Create your views here.
 
 # 获取全部的书籍
@@ -24,13 +25,9 @@ class BooksView(View):
         books = BookInfo.objects.all()
         '''
         [
-
             {'btitle': '西游记', 'bpub_date': '1986-12-12', ....}
             .......
-
         ]
-
-
         '''
         # 数据格式转化
         book_list = []
@@ -131,6 +128,7 @@ class BookView(View):
         book.delete()
         return HttpResponse
 
+
 # 操作数据库： 直接查询数据： 获取传来的数据进行验证后写入数据库
 # 返回数据
 # DRF
@@ -139,6 +137,3 @@ class BooksViewSet(ModelViewSet):
     queryset = BookInfo.objects.all()
     # 展示
     serializer_class = BookInfoSerializers
-
-
-
