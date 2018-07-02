@@ -5,7 +5,8 @@ from django.http import HttpResponse
 from django.shortcuts import render
 from django.views.generic import View
 import json
-
+from rest_framework.viewsets import ModelViewSet  # DRF 导入
+from .serializers import BookInfoSerializers
 # Create your views here.
 
 # 获取全部的书籍
@@ -129,3 +130,15 @@ class BookView(View):
             raise e
         book.delete()
         return HttpResponse
+
+# 操作数据库： 直接查询数据： 获取传来的数据进行验证后写入数据库
+# 返回数据
+# DRF
+class BooksViewSet(ModelViewSet):
+    # 获取shuju
+    queryset = BookInfo.objects.all()
+    # 展示
+    serializer_class = BookInfoSerializers
+
+
+
