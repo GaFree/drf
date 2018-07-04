@@ -1,16 +1,19 @@
 from rest_framework import serializers
-from .models import BookInfo
+from .models import BookInfo,HeroInfo
 
-
+from rest_framework.views import APIView
 class BookInfoSerializers(serializers.ModelSerializer):
     """书籍模型类序列化器"""
 
     class Meta:
         # 要系列化或者反序列化的模型类
-        model = BookInfo
+        # model = BookInfo
+        model = HeroInfo
         # 把所有的字段都显示
         # fields = ['id','btitle'] 展示指定字段
         fields = '__all__'
+        # 关联数据的深度，假如是2层，就设置为depth = 2
+        depth = 1
 
 
 # 验证器函数
@@ -28,7 +31,7 @@ class BookInfoSerializer(serializers.Serializer):
     bread = serializers.IntegerField(label='阅读量', required=False)
     bcomment = serializers.IntegerField(label='评论量', required=False)
     image = serializers.ImageField(label='图片', required=False)
-    heroinfo_set = serializers.PrimaryKeyRelatedField(read_only=True, many=True)
+    # heroinfo_set = serializers.PrimaryKeyRelatedField(read_only=True, many=True)
 
     # def create(self, validated_data):
     #     pass
@@ -59,12 +62,11 @@ class BookInfoSerializer(serializers.Serializer):
         return BookInfo.objects.create(**validated_data)
 
     def update(self, instance, validated_data):
-        instance.btitle = validated_data('btitle', instance.btitle)
+        instance.btitle = validated_data.get('btitle', instance.btitle)
         instance.bpub_date = validated_data.get('bpub_date', instance.bpub_date)
         instance.bread = validated_data.get('bread', instance.bread)
         instance.bcomment = validated_data.get('bcomment', instance.bcomment)
-        # 保存更新的数据到数据库
-        instance.sava()
+        instance.save()
         return instance
 
 
@@ -79,6 +81,6 @@ class HeroInfoSerializer(serializers.Serializer):
     hgender = serializers.ChoiceField(choices=GENDER_CHOICES, label='性别', required=False)
     hcomment = serializers.CharField(label='评论量', max_length=200, required=False, allow_null=True)
     # 外键序列化
-    # hbook = serializers.PrimaryKeyRelatedField(label='书籍', read_only=True)
+    hbook = serializers.PrimaryKeyRelatedField(label='书籍', read_only=True)
     # hbook = serializers.StringRelatedField(label='书籍')
     # hbook = BookInfoSerializer()
